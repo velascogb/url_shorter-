@@ -1,73 +1,63 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+Step 1: Install Dependencies
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Installation
+To begin, install the necessary dependencies for the application. Open a terminal in the project's root directory and execute:
 
 ```bash
-$ yarn install
+yarn install
 ```
 
-## Running the app
+### Step 2: Run Docker Compose for the Database
+
+Next, ensure Docker is running on your machine and start the database using Docker Compose with:
 
 ```bash
-# development
-$ yarn run start
-
-# watch mode
-$ yarn run start:dev
-
-# production mode
-$ yarn run start:prod
+docker-compose up -d
 ```
 
-## Test
+This will initialize and run your database service in detached mode.
+
+This prepares your project for version control.
+
+### Step 3: Running the Application
+
+To run your NestJS application, use:
 
 ```bash
-# unit tests
-$ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
+yarn start
 ```
 
-## Support
+This command launches the application, making it accessible via the defined ports.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### Running Tests (Optional)
 
-## Stay in touch
+If you wish to run tests, execute:
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+```bash
+yarn test
+```
 
-## License
+This will run the test suite associated with the application.
 
-Nest is [MIT licensed](LICENSE).
+## API Endpoints
+
+The application includes the following endpoints:
+
+- **POST to localhost:3000/** - To add a new URL. The request body should look like:
+
+  ```json
+  {
+    "originalUrl": "https://www.nike.com"
+  }
+  ```
+
+- **GET to localhost:3000/urlshortener** - Redirects to the original URL based on the provided shortened path.
+
+- **GET to localhost:3000/top/urls** - Retrieves a list of the top 100 most visited URLs.
+
+Utilize these endpoints to interact with the URL Shortener application.
+
+Well, in this case, the last 6 characters of the encoded algorithm from a string encoded in base62 were used, which means a way to compress large numbers into shorter strings using uppercase and lowercase letters.
+
+First, the alphabet was defined, then the ID is converted, and a parseInt with slice is used to convert the last 6 digits from a hexadecimal representation, which is generated by MongoDB, and avoid working with the whole identifier.
+
+Afterward, a while loop is used to convert the whole number to base 62. In each iteration of the loop, calculating the remainder 62, and based on that, selects an alphabet and adds it to the beginning of the string. Then it divides by 62 and takes the integer part for the next iteration, and so on until the number is 0. This function is injective because within its defined domain (the numbers obtained from id.slice(-6)), each whole number is mapped to a unique base 62 string.
